@@ -2,7 +2,6 @@ package org.dengo.chat_backend.security;
 
 import lombok.RequiredArgsConstructor;
 import org.dengo.chat_backend.util.JWTFilter;
-import org.dengo.chat_backend.util.JWTTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
