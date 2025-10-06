@@ -1,4 +1,4 @@
-package member.domain;
+package org.dengo.chat_backend.member.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
