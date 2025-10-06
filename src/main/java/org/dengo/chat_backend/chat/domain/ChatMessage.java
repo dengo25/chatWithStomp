@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.dengo.chat_backend.member.domain.Member;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,11 +21,18 @@ public class ChatMessage {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "chat_room_id", nullable = false)
   private ChatRoom chatRoom;
   
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "member_id", nullable = false)
   private Member member;
   
+  @Column(nullable = false, length = 500)
   private String content;
+  
+  @OneToMany(mappedBy = "chatMessage", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  private List<ReadStatus> readStatuses = new ArrayList<>();
   
 }
