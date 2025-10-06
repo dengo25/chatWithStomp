@@ -1,6 +1,7 @@
 package org.dengo.chat_backend.security;
 
 import lombok.RequiredArgsConstructor;
+import org.dengo.chat_backend.util.JWTFilter;
 import org.dengo.chat_backend.util.JWTTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +22,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfig {
   
-  private final JWTTokenProvider jwtTokenProvider;
+  private final JWTFilter jwtFilter;
   
   @Bean
   public SecurityFilterChain myFilter(HttpSecurity httpSecurity) throws Exception {
@@ -33,7 +34,7 @@ public class SecurityConfig {
         //특정 url패턴에 대해서는 Authentication객체 요구하지 않음.(인증처리 제외)
         .authorizeHttpRequests(a -> a.requestMatchers("/member/create", "/member/doLogin", "/connect/**").permitAll().anyRequest().authenticated())
         .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //세션방식을 사용하지 않겠다라는 의미
-        .addFilterBefore(jwtTokenProvider, UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
   }
   
