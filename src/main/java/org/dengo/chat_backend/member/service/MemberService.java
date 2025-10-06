@@ -1,11 +1,15 @@
 package org.dengo.chat_backend.member.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.dengo.chat_backend.member.domain.Member;
+import org.dengo.chat_backend.member.dto.MemberLoginReqDTO;
 import org.dengo.chat_backend.member.dto.MemberSaveReqDTO;
 import org.dengo.chat_backend.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -29,4 +33,11 @@ public class MemberService {
     return newMember;
   }
   
+  
+  public Member login(MemberLoginReqDTO memberLoginReqDTO) {
+    Member member = memberRepository.findByEmail(memberLoginReqDTO.getEmail())
+        .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 회원입니다."));
+    
+    return member;
+  }
 }

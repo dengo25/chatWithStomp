@@ -2,11 +2,13 @@ package org.dengo.chat_backend.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.dengo.chat_backend.member.domain.Member;
+import org.dengo.chat_backend.member.dto.MemberLoginReqDTO;
 import org.dengo.chat_backend.member.dto.MemberSaveReqDTO;
 import org.dengo.chat_backend.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +20,17 @@ public class MemberController {
   private final MemberService memberService;
   
   @PostMapping("/create")
-  public ResponseEntity<?> memberCreate(MemberSaveReqDTO memberSaveReqDTO) {
+  public ResponseEntity<?> memberCreate(@RequestBody MemberSaveReqDTO memberSaveReqDTO) {
     Member member = memberService.create(memberSaveReqDTO);
     return new ResponseEntity<>(member.getId(), HttpStatus.CREATED);
+  }
+  
+  @PostMapping("/doLogin")
+  public ResponseEntity<?> doLogin(@RequestBody MemberLoginReqDTO memberLoginReqDTO) {
+    
+    Member member = memberService.login(memberLoginReqDTO);
+    
+    //토큰 발행 로직
+    return null;
   }
 }
