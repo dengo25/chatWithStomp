@@ -6,6 +6,7 @@ import org.dengo.chat_backend.member.domain.Member;
 import org.dengo.chat_backend.member.dto.MemberLoginReqDTO;
 import org.dengo.chat_backend.member.dto.MemberSaveReqDTO;
 import org.dengo.chat_backend.member.repository.MemberRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class MemberService {
   
   private final MemberRepository memberRepository;
+  private final PasswordEncoder passwordEncoder;
   
   public Member create(MemberSaveReqDTO memberSaveReqDTO) {
     
@@ -26,7 +28,7 @@ public class MemberService {
     
     Member member = Member.builder()
         .email(memberSaveReqDTO.getEmail())
-        .password(memberSaveReqDTO.getPassword())
+        .password(passwordEncoder.encode(memberSaveReqDTO.getPassword()))
         .build();
     
     Member newMember = memberRepository.save(member);
