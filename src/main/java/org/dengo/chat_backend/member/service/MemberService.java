@@ -6,10 +6,13 @@ import org.dengo.chat_backend.member.domain.Member;
 import org.dengo.chat_backend.member.dto.MemberLoginReqDTO;
 import org.dengo.chat_backend.member.dto.MemberSaveReqDTO;
 import org.dengo.chat_backend.member.repository.MemberRepository;
+import org.dengo.chat_backend.util.JWTTokenProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -19,6 +22,7 @@ public class MemberService {
   
   private final MemberRepository memberRepository;
   private final PasswordEncoder passwordEncoder;
+  private final JWTTokenProvider jwtTokenProvider;
   
   public Member create(MemberSaveReqDTO memberSaveReqDTO) {
     
@@ -45,5 +49,13 @@ public class MemberService {
     }
     
     return member;
+  }
+  
+  public  Map<String, Object> getInfo(Member member) {
+    String jwtToken = jwtTokenProvider.createToken(member.getEmail(), member.getRole().toString());
+    Map<String, Object> loginInfo = new HashMap<>();
+    loginInfo.put("id", member.getId());
+    loginInfo.put("token", jwtToken);
+    return loginInfo;
   }
 }

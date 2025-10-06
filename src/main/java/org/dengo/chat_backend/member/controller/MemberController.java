@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -37,10 +36,10 @@ public class MemberController {
     Member member = memberService.login(memberLoginReqDTO);
     
     //토큰 발행 로직
-    String jwtToken = jwtTokenProvider.createToken(member.getEmail(), member.getRole().toString());
-    Map<String, Object> loginInfo = new HashMap<>();
-    loginInfo.put("id", member.getId());
-    loginInfo.put("token", jwtToken);
+    Map<String, Object> loginInfo = memberService.getInfo(member);
+    
     return new ResponseEntity<>(loginInfo, HttpStatus.OK);
   }
+  
+
 }
