@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -59,5 +60,21 @@ public class ChatService {
         .build();
     
     chatParticipantRepository.save(chatParticipant);
+  }
+  
+  public boolean isRoomParticipant(String email, long roomId) {
+    
+    ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("room cannot be found"));
+    
+    Member member = memberRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("room cannot be found"));
+    
+    List<ChatParticipant> chatParticipants = chatParticipantRepository.findByChatRoom(chatRoom);
+    for (ChatParticipant c : chatParticipants) {
+      if (c.getMember().equals(member)) {
+        return true;
+      }
+    }
+    
+    return false;
   }
 }
