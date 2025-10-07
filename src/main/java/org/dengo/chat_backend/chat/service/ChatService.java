@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -110,5 +111,38 @@ public class ChatService {
       
       readStatusRepository.save(readStatus);
     }
+  }
+  
+  //이전 메세지 조회
+  public List<ChatMessageDTO> getHistory(Long roomId) {
+    // 내가 해당 채팅방의 참여자가 아닐경우 에러
+    ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("room cannot be found"));
+    
+    Member member = memberRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() -> new EntityNotFoundException("room cannot be found"));
+    
+    List<ChatParticipant> chatParticipants = chatParticipantRepository.findByChatRoom(chatRoom);
+    
+    boolean check = false;
+    for (ChatParticipant chatParticipant : chatParticipants) {
+      if (chatParticipant.getMember().equals(member)) {
+        check = true;
+      } // end if
+    }// end for
+    
+    if (!check) throw new IllegalArgumentException("본인이 속하지 않은 채팅방입니다.");
+    
+    // 특정 room에 대한 message 조회
+    List<ChatMessage> chatMessages = chatMessageRepository.findByChatRoomOrderByCreatedTimeAsc(chatRoom);
+    List<ChatMessageDTO> chatMessageDTOS = new ArrayList<>();
+    
+    for (ChatMessage chatMessage : chatMessages) {
+      ChatMessageDTO chatMessageDTO = ChatMessageDTO.builder()
+          .message(chatMessage.getContent())
+          .senderEmail(chatMessage.getMember().getEmail())
+          .build();
+      chatMessageDTOS.add(chatMessageDTO);
+    }
+    
+    return chatMessageDTOS;
   }
 }
