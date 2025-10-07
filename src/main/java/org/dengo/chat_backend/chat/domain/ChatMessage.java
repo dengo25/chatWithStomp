@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.dengo.chat_backend.member.domain.Member;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,5 +36,9 @@ public class ChatMessage {
   
   @OneToMany(mappedBy = "chatMessage", cascade = CascadeType.REMOVE, orphanRemoval = true)
   private List<ReadStatus> readStatuses = new ArrayList<>();
+  
+  @CreationTimestamp
+  private LocalDateTime createdTime;
+  
   
 }
