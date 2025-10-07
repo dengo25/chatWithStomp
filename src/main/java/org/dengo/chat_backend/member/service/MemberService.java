@@ -3,6 +3,7 @@ package org.dengo.chat_backend.member.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.dengo.chat_backend.member.domain.Member;
+import org.dengo.chat_backend.member.dto.MemberListResDTO;
 import org.dengo.chat_backend.member.dto.MemberLoginReqDTO;
 import org.dengo.chat_backend.member.dto.MemberSaveReqDTO;
 import org.dengo.chat_backend.member.repository.MemberRepository;
@@ -11,9 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -57,5 +56,22 @@ public class MemberService {
     loginInfo.put("id", member.getId());
     loginInfo.put("token", jwtToken);
     return loginInfo;
+  }
+  
+  
+  public List<MemberListResDTO> findAll() {
+    List<Member> memberList = memberRepository.findAll();
+    List<MemberListResDTO> memberListResDTOS = new ArrayList<>();
+    
+    for (Member member : memberList) {
+      MemberListResDTO memberListResDTO = new MemberListResDTO();
+      memberListResDTO.setId(member.getId());
+      memberListResDTO.setEmail(member.getEmail());
+      memberListResDTO.setName(member.getName());
+      memberListResDTOS.add(memberListResDTO);
+    }  //end for
+    
+    return memberListResDTOS;
+    
   }
 }
