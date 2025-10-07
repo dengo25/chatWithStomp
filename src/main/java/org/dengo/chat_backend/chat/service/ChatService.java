@@ -45,7 +45,7 @@ public class ChatService {
     // 없으면 새로 생성
     ChatRoom newRoom = ChatRoom.builder()
         .isGroupChat("N")
-        .name(member.getName() + "_" + otherMember.getName())
+        .name( otherMember.getName()+"님과 "+member.getName()+"(나)")
         .build();
     
     chatRoomRepository.save(newRoom);
