@@ -39,7 +39,7 @@ WebSocket(STOMP)을 활용한 실시간 채팅 시스템의 백엔드 API 서버
 
 ```bash
 # 프로젝트 클론
-git clone <repository-url>
+git clone https://github.com/dengo25/chatWithStomp.git
 cd chat_backend
 
 # 빌드 및 실행
