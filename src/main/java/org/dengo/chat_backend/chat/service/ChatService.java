@@ -169,4 +169,20 @@ public class ChatService {
     } //end for
     return chatListResDTOS;
   }
+  
+  
+  // 메세지 읽음 처리 로직-> 채팅방에서 나갔을때 disconnect 되었을 떄
+  public void messageRead(Long roomId) {
+    ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("room cannot be found"));
+    
+    Member member = memberRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
+        .orElseThrow(() -> new EntityNotFoundException("room cannot be found"));
+    
+    List<ReadStatus> readStatuses = readStatusRepository.findByChatRoomAndMember(chatRoom, member);
+    
+    for (ReadStatus readStatus : readStatuses) {
+      readStatus.updateIsRead(true);
+    } //end for
+    
+  }
 }

@@ -36,4 +36,10 @@ public class ChatController {
     List<MyChatListResDTO> myChatListResDTOS = chatService.getMyChatRooms();
     return new ResponseEntity<>(myChatListResDTOS, HttpStatus.OK);
   }
+  
+  @PostMapping("/room/{roomId}/read")
+  public ResponseEntity<?> messageRead(@PathVariable Long roomId) {
+    chatService.messageRead(roomId);
+    return ResponseEntity.ok().build();
+  }
 }
