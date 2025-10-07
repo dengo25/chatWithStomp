@@ -2,6 +2,7 @@ package org.dengo.chat_backend.chat.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.dengo.chat_backend.chat.dto.ChatMessageDTO;
+import org.dengo.chat_backend.chat.dto.MyChatListResDTO;
 import org.dengo.chat_backend.chat.service.ChatService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,5 +28,12 @@ public class ChatController {
   public ResponseEntity<?> getHistory(@PathVariable Long roomId) {
     List<ChatMessageDTO> chatMessageDTOS = chatService.getHistory(roomId);
     return new ResponseEntity<>(chatMessageDTOS, HttpStatus.OK);
+  }
+  
+  // 내 채팅방 목록 조회
+  @GetMapping("/my/rooms")
+  public ResponseEntity<?> getMyChatRooms() {
+    List<MyChatListResDTO> myChatListResDTOS = chatService.getMyChatRooms();
+    return new ResponseEntity<>(myChatListResDTOS, HttpStatus.OK);
   }
 }
