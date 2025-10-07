@@ -2,6 +2,7 @@ package org.dengo.chat_backend.chat.repository;
 
 import org.dengo.chat_backend.chat.domain.ChatParticipant;
 import org.dengo.chat_backend.chat.domain.ChatRoom;
+import org.dengo.chat_backend.member.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +19,5 @@ public interface ChatParticipantRepository extends JpaRepository<ChatParticipant
   
   List<ChatParticipant> findByChatRoom(ChatRoom chatRoom);
   
+  List<ChatParticipant> findAllByMember(Member member);
 }

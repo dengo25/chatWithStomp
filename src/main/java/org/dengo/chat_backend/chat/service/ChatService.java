@@ -7,6 +7,7 @@ import org.dengo.chat_backend.chat.domain.ChatParticipant;
 import org.dengo.chat_backend.chat.domain.ChatRoom;
 import org.dengo.chat_backend.chat.domain.ReadStatus;
 import org.dengo.chat_backend.chat.dto.ChatMessageDTO;
+import org.dengo.chat_backend.chat.dto.MyChatListResDTO;
 import org.dengo.chat_backend.chat.repository.ChatMessageRepository;
 import org.dengo.chat_backend.chat.repository.ChatParticipantRepository;
 import org.dengo.chat_backend.chat.repository.ChatRoomRepository;
@@ -144,5 +145,28 @@ public class ChatService {
     }
     
     return chatMessageDTOS;
+  }
+  
+  // 내가 현재 참여하고 있는 채팅방 리스트 조회
+  public List<MyChatListResDTO> getMyChatRooms() {
+    Member member = memberRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
+        .orElseThrow(() -> new EntityNotFoundException("room cannot be found"));
+    
+    List<ChatParticipant> chatParticipants = chatParticipantRepository.findAllByMember(member);
+    List<MyChatListResDTO> chatListResDTOS = new ArrayList<>();
+    
+    for (ChatParticipant chatParticipant : chatParticipants) {
+      Long count = readStatusRepository.countByChatRoomAndMemberAndIsReadFalse(chatParticipant.getChatRoom(), member);
+      
+      MyChatListResDTO dto = MyChatListResDTO.builder()
+          .roomId(chatParticipant.getChatRoom().getId())
+          .roomName(chatParticipant.getChatRoom().getName())
+          .isGroupChat(chatParticipant.getChatRoom().getIsGroupChat())
+          .unReadCount(count)
+          .build();
+      
+      chatListResDTOS.add(dto);
+    } //end for
+    return chatListResDTOS;
   }
 }
