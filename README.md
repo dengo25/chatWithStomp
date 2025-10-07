@@ -148,11 +148,20 @@ src/main/java/org/dengo/chat_backend/
 
 ## ⚙️ 설정
 
-`application.properties` 또는 `application.yml` 파일에서 다음 설정을 구성하세요:
+### 1. 데이터베이스 설정 (`application.yml`)
 
-- 데이터베이스 연결
-- JWT 시크릿 키
-- WebSocket 설정
+MySQL 연결 정보 (host, port, username, password) 및 JPA 설정을 구성하세요.
+
+### 2. WebSocket 설정 (`WebSocketConfig.java`)
+
+WebSocket 설정은 Java Config로 구성되어 있습니다:
+- **STOMP Endpoint**: `/connect` (SockJS 지원)
+- **Allowed Origins**: `http://localhost:5173`
+- **Message Broker**: `/topic/*` (구독용), `/publish/*` (발행용)
+- **인증**: `StompHandler`를 통한 JWT 토큰 검증
+
+
+
 
 ## 📝 최근 커밋
 
