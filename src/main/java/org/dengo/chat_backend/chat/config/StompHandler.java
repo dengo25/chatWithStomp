@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.dengo.chat_backend.chat.service.ChatService;
+import org.dengo.chat_backend.util.JWTTokenProvider;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -20,6 +21,7 @@ import static org.dengo.chat_backend.util.JWTFilter.secretKey;
 public class StompHandler implements ChannelInterceptor {
   
   private final ChatService chatService;
+  private final JWTTokenProvider jwtTokenProvider;
   
   @Override //WebSocket 메시지가 브로커로 보내지기 직전에 호출
   public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -36,11 +38,7 @@ public class StompHandler implements ChannelInterceptor {
       String token = bearerToken.substring(7);
       
       // 토큰 검증
-      Claims claims = Jwts.parserBuilder()
-          .setSigningKey(secretKey)
-          .build()
-          .parseClaimsJws(token)
-          .getBody();
+      Claims claims = jwtTokenProvider.parseToken(token);
       
       System.out.println("토큰 검증 완료");
     } //end if
@@ -51,11 +49,7 @@ public class StompHandler implements ChannelInterceptor {
       String token = bearerToken.substring(7);
       
       //토큰 검증
-      Claims claims = Jwts.parserBuilder()
-          .setSigningKey(secretKey)
-          .build()
-          .parseClaimsJws(token)
-          .getBody();
+      Claims claims = jwtTokenProvider.parseToken(token);
       
       String email = claims.getSubject();
       

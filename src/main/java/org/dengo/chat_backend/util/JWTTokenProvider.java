@@ -37,4 +37,12 @@ public class JWTTokenProvider {
     
     return token;
   }
+  
+  public Claims parseToken(String token) {
+    return Jwts.parserBuilder()
+        .setSigningKey(secretKey)
+        .build()
+        .parseClaimsJws(token)
+        .getBody();
+  }
 }
