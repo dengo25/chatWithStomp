@@ -2,8 +2,11 @@ package org.dengo.chat_backend.chat.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.dengo.chat_backend.chat.domain.ChatMessage;
 import org.dengo.chat_backend.chat.domain.ChatParticipant;
 import org.dengo.chat_backend.chat.domain.ChatRoom;
+import org.dengo.chat_backend.chat.domain.ReadStatus;
+import org.dengo.chat_backend.chat.dto.ChatMessageDTO;
 import org.dengo.chat_backend.chat.repository.ChatMessageRepository;
 import org.dengo.chat_backend.chat.repository.ChatParticipantRepository;
 import org.dengo.chat_backend.chat.repository.ChatRoomRepository;
@@ -76,5 +79,36 @@ public class ChatService {
     }
     
     return false;
+  }
+  
+  public void saveMessage(Long roomId, ChatMessageDTO chatMessageDTO) {
+    
+    // 채팅방 조회
+    ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new EntityNotFoundException("room cannot found"));
+    
+    //보낸 사람 조회
+    Member member = memberRepository.findByEmail(chatMessageDTO.getSenderEmail()).orElseThrow(() -> new EntityNotFoundException("room cannot found"));
+    
+    //메세지 저장
+    ChatMessage chatMessage = ChatMessage.builder()
+        .chatRoom(chatRoom)
+        .member(member)
+        .content(chatMessageDTO.getMessage())
+        .build();
+    
+    chatMessageRepository.save(chatMessage);
+    
+    // 읽음 여부 저장
+    List<ChatParticipant> chatParticipants = chatParticipantRepository.findByChatRoom(chatRoom);
+    for (ChatParticipant chatParticipant : chatParticipants) {
+      ReadStatus readStatus = ReadStatus.builder()
+          .chatRoom(chatRoom)
+          .member(chatParticipant.getMember())
+          .chatMessage(chatMessage)
+          .isRead(chatParticipant.getMember().equals(member))
+          .build();
+      
+      readStatusRepository.save(readStatus);
+    }
   }
 }
