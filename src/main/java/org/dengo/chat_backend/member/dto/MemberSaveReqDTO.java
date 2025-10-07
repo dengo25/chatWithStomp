@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MemberSaveReqDTO {
   
-  private Long id;
+  private String name;
   private String email;
   private String password;
   
