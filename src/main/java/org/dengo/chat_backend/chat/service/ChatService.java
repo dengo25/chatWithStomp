@@ -14,6 +14,7 @@ import org.dengo.chat_backend.chat.repository.ChatRoomRepository;
 import org.dengo.chat_backend.chat.repository.ReadStatusRepository;
 import org.dengo.chat_backend.member.domain.Member;
 import org.dengo.chat_backend.member.repository.MemberRepository;
+import org.dengo.chat_backend.util.SlackNoti;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,8 @@ public class ChatService {
   private final ChatMessageRepository chatMessageRepository;
   private final ReadStatusRepository readStatusRepository;
   private final MemberRepository memberRepository;
+  private final SlackNoti slackNoti;
+  
   
   public Long getOrCreatePrivateRoom(Long otherMemberId) {
     Member member = memberRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() -> new EntityNotFoundException("채팅방을 찾을 수 없습니다"));
@@ -111,7 +114,17 @@ public class ChatService {
           .build();
       
       readStatusRepository.save(readStatus);
-    }
+      
+      // memberId가 1인 사람에게 메세지가 오면 slack 알람
+        if (chatParticipant.getMember().getId() == 1L && !chatParticipant.getMember().equals(member)) {
+          slackNoti.sendChatNotification(
+              chatParticipant.getMember().getId(),
+              member.getName(),
+              chatMessageDTO.getMessage(),
+              roomId
+          );
+        }
+      }
   }
   
   //이전 메세지 조회
