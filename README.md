@@ -2,11 +2,11 @@
 
 Spring Boot 기반 실시간 채팅 백엔드 서버
 
-## 📋 프로젝트 개요
+##  프로젝트 개요
 
 WebSocket(STOMP)을 활용한 실시간 채팅 시스템의 백엔드 API 서버입니다.
 
-## 🛠 기술 스택
+##  기술 스택
 
 - **Java 17**
 - **Spring Boot 3.4.10**
@@ -19,7 +19,7 @@ WebSocket(STOMP)을 활용한 실시간 채팅 시스템의 백엔드 API 서버
 - **Lombok**
 - **Gradle**
 
-## 📦 주요 기능
+##  주요 기능
 
 - 실시간 채팅 메시지 송수신 (WebSocket/STOMP)
 - JWT 기반 인증 및 권한 관리
@@ -28,7 +28,7 @@ WebSocket(STOMP)을 활용한 실시간 채팅 시스템의 백엔드 API 서버
 - 메시지 읽음 처리
 - 내가 참여한 채팅방 목록 조회
 
-## 🚀 실행 방법
+##  실행 방법
 
 ### 사전 요구사항
 
@@ -52,7 +52,7 @@ cd chat_backend
 ./gradlew test
 ```
 
-## 📁 프로젝트 구조
+##  프로젝트 구조
 
 ```
 src/main/java/org/dengo/chat_backend/
@@ -67,7 +67,7 @@ src/main/java/org/dengo/chat_backend/
 └── util/                # JWT 유틸리티
 ```
 
-## 🔗 API 엔드포인트
+##  API 엔드포인트
 
 ### REST API
 
@@ -146,7 +146,7 @@ src/main/java/org/dengo/chat_backend/
   }
   ```
 
-## ⚙️ 설정
+##  설정
 
 ### 1. 데이터베이스 설정 (`application.yml`)
 
@@ -163,13 +163,13 @@ WebSocket 설정은 Java Config로 구성되어 있습니다:
 
 
 
-## 📝 최근 커밋
+##  최근 커밋
 
 - 채팅방 이름 로직 수정
 - 오류 처리 컨트롤러 구성
 - 메시지 읽음 처리 구성
 - 내가 참여한 채팅방 목록 조회
 
-## 📄 라이선스
+##  라이선스
 
 이 프로젝트는 개인 프로젝트입니다.
