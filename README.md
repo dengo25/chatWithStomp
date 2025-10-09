@@ -152,6 +152,7 @@ src/main/java/org/dengo/chat_backend/
 
 MySQL 연결 정보 (host, port, username, password) 및 JPA 설정을 구성하세요.
 
+
 ### 2. WebSocket 설정 (`WebSocketConfig.java`)
 
 WebSocket 설정은 Java Config로 구성되어 있습니다:
@@ -161,15 +162,5 @@ WebSocket 설정은 Java Config로 구성되어 있습니다:
 - **인증**: `StompHandler`를 통한 JWT 토큰 검증
 
 
-
-
-##  최근 커밋
-
-- 채팅방 이름 로직 수정
-- 오류 처리 컨트롤러 구성
-- 메시지 읽음 처리 구성
-- 내가 참여한 채팅방 목록 조회
-
 ##  라이선스
-
 이 프로젝트는 개인 프로젝트입니다.
