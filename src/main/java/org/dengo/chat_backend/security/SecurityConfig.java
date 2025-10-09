@@ -45,11 +45,11 @@ public class SecurityConfig {
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+    configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "https://chat.thekosta.com"));
     configuration.setAllowedMethods(Arrays.asList("*")); //모든 HTTP메서드 허용
     configuration.setAllowedHeaders(Arrays.asList("*")); //모든 헤더값 허용
     configuration.setAllowCredentials(true); //자격증명허용
-    
+
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration); //모든 url에 패턴에 대해 cors 허용 설정
     return source;
